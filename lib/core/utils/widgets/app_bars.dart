@@ -21,26 +21,22 @@ class SecondaryAppBar extends StatelessWidget implements PreferredSizeWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 30,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    alignment: Alignment.centerRight,
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                    ),
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              alignment: Alignment.centerRight,
+              onPressed: () => Get.back(),
+              iconSize: 20,
+              icon: Row(
+                children: [
+                  Icon(
+                    Icons.arrow_back_ios_new_rounded,
                   ),
-                ),
-                Text(
-                  'رجوع',
-                  style: TextStyles.font15BlackRegular,
-                ),
-              ],
+                  Text(
+                    'رجوع',
+                    style: TextStyles.font15BlackRegular,
+                  ),
+                ],
+              ),
             ),
           ),
           Flexible(

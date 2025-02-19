@@ -17,6 +17,7 @@ class AppTextButton extends StatelessWidget {
   final bool isDisabled;
   final Widget? icon;
   final bool isWithIcon;
+  final WidgetStateProperty<Color?>? overlayColor;
   const AppTextButton({
     super.key,
     this.borderRadius,
@@ -32,6 +33,7 @@ class AppTextButton extends StatelessWidget {
     this.isDisabled = false,
     this.icon,
     this.isWithIcon = false,
+    this.overlayColor,
   });
 
   @override
@@ -58,7 +60,7 @@ class AppTextButton extends StatelessWidget {
                   ? Colors.white
                   : backgroundColor ?? ColorsManager.primary,
         ),
-        overlayColor: WidgetStatePropertyAll(
+        overlayColor: overlayColor ?? WidgetStatePropertyAll(
           isDisabled
               ? Colors.transparent
               : isOutlinedBtn
