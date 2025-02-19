@@ -33,6 +33,8 @@ class ColorsManager {
   static const Color lighterGray = Color(0xFFEDEDED);
   static const Color moreLightGray = Color(0xFFFDFDFF);
 
+   static const Color containerBackground = Color(0xFFF3F3F5);
+
   // border
   static const Color borderLight = Color(0xFFE1DFEB);
 

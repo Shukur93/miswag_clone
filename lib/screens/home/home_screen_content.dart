@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:miswag_clone/core/utils/helpers/spacing.dart';
 import 'package:miswag_clone/core/utils/themes/colors_manager.dart';
 import 'package:miswag_clone/core/utils/widgets/search_bar_engine.dart';
 import 'package:miswag_clone/core/utils/widgets/shimmer_placeholders.dart';
+import 'package:miswag_clone/screens/items_screen/items_screen.dart';
 
 class HomeScreenContent extends StatefulWidget {
   const HomeScreenContent({super.key});
@@ -76,7 +78,7 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
         child: Container(
           margin: EdgeInsets.only(top: 15),
           padding: EdgeInsets.only(top: 5, bottom: 5),
-          color: Color(0xFFF3F3F5),
+          color: ColorsManager.containerBackground,
           child: Column(
             spacing: 15,
             children: [
@@ -96,9 +98,18 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 5),
                   children: [
-                    Image.asset('assets/images/a1.png'),
-                    Image.asset('assets/images/a2.png'),
-                    Image.asset('assets/images/a3.png'),
+                    InkWell(
+                      onTap: () => Get.to(() => const ItemsScreen()),
+                      child: Image.asset('assets/images/a1.png'),
+                    ),
+                    InkWell(
+                      onTap: () => Get.to(() => const ItemsScreen()),
+                      child: Image.asset('assets/images/a2.png'),
+                    ),
+                    InkWell(
+                      onTap: () => Get.to(() => const ItemsScreen()),
+                      child: Image.asset('assets/images/a3.png'),
+                    ),
                   ],
                 ),
               ),
