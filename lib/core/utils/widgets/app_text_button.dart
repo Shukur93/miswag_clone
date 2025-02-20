@@ -64,8 +64,8 @@ class AppTextButton extends StatelessWidget {
           isDisabled
               ? Colors.transparent
               : isOutlinedBtn
-                  ? ColorsManager.overlayLightPrimary
-                  : ColorsManager.overlayPrimary,
+                  ? ColorsManager.overlayLightSecondary
+                  : ColorsManager.overlaySecondary,
         ),
         padding: WidgetStateProperty.all<EdgeInsets>(
           EdgeInsets.symmetric(

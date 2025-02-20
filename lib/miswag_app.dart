@@ -73,22 +73,22 @@ class _MiswagAppState extends State<MiswagApp> {
 
           // Add other text styles as needed
         ),
-        colorScheme: const ColorScheme(
-          secondary: ColorsManager.primaryText,
-          surface: Colors.white,
-          // background: Color(0xFFEDEDED),
-          error: Colors.red,
-          onPrimary: ColorsManager
-              .primaryText, // make text and icons dark gray by default
-          onSecondary: Colors.white,
-          onSurface: ColorsManager
-              .primaryText, // make text and icons dark gray by default
-          // onBackground: Colors.white,
-          onError: ColorsManager.white,
-          brightness: Brightness.light,
-          primary: Colors.white,
-          // onSurfaceVariant: Colors.amber
-        ),
+        // colorScheme: const ColorScheme(
+        //   secondary: ColorsManager.primaryText,
+        //   surface: Colors.white,
+        //   // background: Color(0xFFEDEDED),
+        //   error: Colors.red,
+        //   onPrimary: ColorsManager
+        //       .primaryText, // make text and icons dark gray by default
+        //   onSecondary: Colors.white,
+        //   onSurface: ColorsManager
+        //       .primaryText, // make text and icons dark gray by default
+        //   // onBackground: Colors.white,
+        //   onError: ColorsManager.white,
+        //   brightness: Brightness.light,
+        //   primary: Colors.white,
+        //   // onSurfaceVariant: Colors.amber
+        // ),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: ColorsManager.primary,
           selectionColor: ColorsManager.lightestPrimary,

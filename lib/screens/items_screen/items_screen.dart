@@ -1,10 +1,22 @@
-import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
+import 'package:get/get.dart';
 import 'package:miswag_clone/core/utils/helpers/spacing.dart';
+import 'package:miswag_clone/core/utils/helpers/text_formatters.dart';
 import 'package:miswag_clone/core/utils/themes/colors_manager.dart';
 import 'package:miswag_clone/core/utils/themes/styles.dart';
 import 'package:miswag_clone/core/utils/widgets/app_bars.dart';
 import 'package:miswag_clone/core/utils/widgets/app_text_button.dart';
+import 'package:miswag_clone/core/utils/widgets/show_modal_sheet.dart';
+import 'package:miswag_clone/screens/items_screen/widgets/thumbnail_item_card.dart';
+
+enum SortOption {
+  defaultOption,
+  priceLowToHigh,
+  priceHighToLow,
+  newest,
+  oldest,
+}
 
 class ItemsScreen extends StatefulWidget {
   const ItemsScreen({super.key});
@@ -14,7 +26,19 @@ class ItemsScreen extends StatefulWidget {
 }
 
 class _ItemsScreenState extends State<ItemsScreen> {
-  List<User>? selectedUserList = [];
+  SortOption? _selectedSort;
+
+  void _openSortModal() {
+    showModal(
+      SortOptionsModal(
+        currentSelection: _selectedSort,
+        onSelectionChanged: (option) {
+          setState(() => _selectedSort = option);
+        },
+      ),
+    );
+  }
+
 // ! BUILD HERE ==--=-============================================
   @override
   Widget build(BuildContext context) {
@@ -31,7 +55,8 @@ class _ItemsScreenState extends State<ItemsScreen> {
                 color: ColorsManager.white,
                 boxShadow: [
                   BoxShadow(
-                    color: const Color.fromARGB(255, 230, 230, 230).withAlpha(100),
+                    color:
+                        const Color.fromARGB(255, 230, 230, 230).withAlpha(100),
                     spreadRadius: 1,
                     blurRadius: 1,
                     offset: const Offset(0, 1),
@@ -56,7 +81,9 @@ class _ItemsScreenState extends State<ItemsScreen> {
                       ),
                       isWithIcon: true,
                       onPressed: () {
-                        _openFilterDialog();
+                        showModal(
+                          FilterationModalContent(),
+                        );
                       },
                     ),
                   ),
@@ -74,7 +101,9 @@ class _ItemsScreenState extends State<ItemsScreen> {
                         size: 25,
                       ),
                       isWithIcon: true,
-                      onPressed: () {},
+                      onPressed: () {
+                        _openSortModal();
+                      },
                     ),
                   ),
                   SizedBox(
@@ -85,116 +114,654 @@ class _ItemsScreenState extends State<ItemsScreen> {
                           Icons.window_outlined,
                           size: 20,
                         )),
-                  )
+                  ),
                 ],
               ),
-            )
+            ),
+            verticalSpace(15),
+            Expanded(
+              child: GridView(
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 250,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                  childAspectRatio: 0.65,
+                ),
+
+                //     const SliverGridDelegateWithFixedCrossAxisCount(
+                //   crossAxisCount: 2,
+                //   mainAxisSpacing: 5,
+                //   crossAxisSpacing: 2,
+                //   childAspectRatio: 0.75,
+                // ),
+                shrinkWrap: true,
+                padding: EdgeInsets.symmetric(horizontal: 5),
+                children: [
+                  ThumbnailItemCard(),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 // ! END BUILD HERE ==--=-============================================
+}
 
-  Future<void> _openFilterDialog() async {
-    await FilterListDialog.display<User>(
-      context,
-      hideSelectedTextCount: true,
-      themeData: FilterListThemeData(
-        context,
-        choiceChipTheme: ChoiceChipThemeData.light(context),
-      ),
-      headlineText: 'Select Users',
-      height: 600,
-      listData: userList,
-      selectedListData: selectedUserList,
-      choiceChipLabel: (item) => item!.name,
-      validateSelectedItem: (list, val) => list!.contains(val),
-      controlButtons: [ControlButtonType.All, ControlButtonType.Reset],
-      onItemSearch: (user, query) {
-        /// When search query change in search bar then this method will be called
-        ///
-        /// Check if items contains query
-        return user.name!.toLowerCase().contains(query.toLowerCase());
-      },
+// ? ================= FILTERATION MODAL CONTENT
+class FilterationModalContent extends StatefulWidget {
+  const FilterationModalContent({
+    super.key,
+  });
 
-      onApplyButtonClick: (list) {
-        setState(() {
-          selectedUserList = List.from(list!);
-        });
-        Navigator.pop(context);
-      },
-      onCloseWidgetPress: () {
-        // Do anything with the close button.
-        //print("hello");
-        Navigator.pop(context, null);
-      },
+  @override
+  State<FilterationModalContent> createState() =>
+      _FilterationModalContentState();
+}
 
-      /// uncomment below code to create custom choice chip
-      /* choiceChipBuilder: (context, item, isSelected) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          decoration: BoxDecoration(
-              border: Border.all(
-            color: isSelected! ? Colors.blue[300]! : Colors.grey[300]!,
-          )),
-          child: Text(
-            item.name,
-            style: TextStyle(
-                color: isSelected ? Colors.blue[300] : Colors.grey[500]),
+class _FilterationModalContentState extends State<FilterationModalContent> {
+  RangeValues _currentRangeValues = const RangeValues(12000, 3850000);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: Get.height * 0.8,
+      alignment: Alignment.topCenter,
+      color: ColorsManager.white,
+      child: Column(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      horizontalSpace(10),
+                      Text(
+                        'تصفية نتائج البحث',
+                        style: TextStyles.font16BlackBold,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Container(
+                        height: 37,
+                        width: 37,
+                        margin: EdgeInsets.only(left: 5),
+                        decoration: BoxDecoration(
+                          color: ColorsManager.lightGray,
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          onPressed: () => Get.back(),
+                          icon: Icon(
+                            Icons.close,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // verticalSpace(15),
+                // rest of the content
+                Expanded(
+                  flex: 5,
+                  child: SingleChildScrollView(
+                    child: Container(
+                      width: double.infinity,
+                      color: ColorsManager.containerBackground,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'الاصناف',
+                            style: TextStyles.font16BlackBold,
+                          ),
+                          verticalSpace(15),
+                          MyMultiSelection(
+                            items: [
+                              MultiSelectCard(
+                                  value: 'سماعات لاسلكية',
+                                  label: 'سماعات لاسلكية'),
+                              MultiSelectCard(
+                                  value: 'كومبيوتر لوحي',
+                                  label: 'كومبيوتر لوحي'),
+                              MultiSelectCard(
+                                  value: 'أجهزة الكترونية',
+                                  label: 'أجهزة الكترونية'),
+                              MultiSelectCard(
+                                  value: 'أجهزة منزلية', label: 'أجهزة منزلية'),
+                              MultiSelectCard(value: "غسالات", label: "غسالات"),
+                            ],
+                          ),
+                          verticalSpace(25),
+                          Text(
+                            'الاحجام',
+                            style: TextStyles.font16BlackBold,
+                          ),
+                          verticalSpace(15),
+                          MyMultiSelection(
+                            items: [
+                              MultiSelectCard(value: "حجم1", label: "حجم1"),
+                              MultiSelectCard(value: "حجم2", label: "حجم2"),
+                              MultiSelectCard(value: "حجم3", label: "حجم3"),
+                            ],
+                          ),
+                          // color picker
+                          verticalSpace(25),
+                          Text(
+                            'الالوان',
+                            style: TextStyles.font16BlackBold,
+                          ),
+                          verticalSpace(15),
+                          colorItems(),
+                          // Price Range
+                          verticalSpace(25),
+                          Text(
+                            'السعر',
+                            style: TextStyles.font16BlackBold,
+                          ),
+                          verticalSpace(15),
+                          Center(
+                            child: Text(
+                              '${thousandFormatter(_currentRangeValues.start)} د.ع - ${thousandFormatter(_currentRangeValues.end)} د.ع',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          verticalSpace(20),
+                          RangeSlider(
+                            values: _currentRangeValues,
+                            max: 5000000,
+                            divisions: 10,
+                            labels: RangeLabels(
+                              _currentRangeValues.start.round().toString(),
+                              _currentRangeValues.end.round().toString(),
+                            ),
+                            activeColor: ColorsManager.secondary,
+                            onChanged: (RangeValues values) {
+                              setState(() {
+                                _currentRangeValues = values;
+                              });
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        );
-      }, */
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Row(
+              children: [
+                Expanded(
+                  child: AppTextButton(
+                    buttonText: 'اغلاق',
+                    isOutlinedBtn: true,
+                    backgroundColor: ColorsManager.secondary,
+                    textStyle: TextStyles.font16BlackBold
+                        .copyWith(color: ColorsManager.secondary),
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
+                ),
+                horizontalSpace(10),
+                Expanded(
+                  child: AppTextButton(
+                    buttonText: 'عرض النتائج',
+                    backgroundColor: ColorsManager.secondary,
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  MyMultiSelection colorItems() {
+    return MyMultiSelection(
+      items: [
+        MultiSelectCard(
+          value: 'purple',
+          label: '',
+          decorations: MultiSelectItemDecorations(
+            decoration: BoxDecoration(
+                color: Colors.purple,
+                // borderRadius: BorderRadius.circular(20),
+                shape: BoxShape.circle),
+            selectedDecoration: BoxDecoration(
+                color: Colors.purple,
+                shape: BoxShape.circle,
+                border: Border.all(width: 2)),
+          ),
+          contentPadding: EdgeInsets.all(18),
+        ),
+        MultiSelectCard(
+          value: 'red',
+          label: '',
+          decorations: MultiSelectItemDecorations(
+            decoration: BoxDecoration(
+                color: Colors.red,
+                // borderRadius: BorderRadius.circular(20),
+                shape: BoxShape.circle),
+            selectedDecoration: BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+                border: Border.all(width: 2)),
+          ),
+          contentPadding: EdgeInsets.all(18),
+        ),
+        MultiSelectCard(
+          value: 'green',
+          label: '',
+          decorations: MultiSelectItemDecorations(
+            decoration: BoxDecoration(
+                color: Colors.green,
+                // borderRadius: BorderRadius.circular(20),
+                shape: BoxShape.circle),
+            selectedDecoration: BoxDecoration(
+                color: Colors.green,
+                shape: BoxShape.circle,
+                border: Border.all(width: 2)),
+          ),
+          contentPadding: EdgeInsets.all(18),
+        ),
+        MultiSelectCard(
+          value: 'blue',
+          label: '',
+          decorations: MultiSelectItemDecorations(
+            decoration: BoxDecoration(
+                color: Colors.blue,
+                // borderRadius: BorderRadius.circular(20),
+                shape: BoxShape.circle),
+            selectedDecoration: BoxDecoration(
+                color: Colors.blue,
+                shape: BoxShape.circle,
+                border: Border.all(width: 2)),
+          ),
+          contentPadding: EdgeInsets.all(18),
+        ),
+        MultiSelectCard(
+          value: 'yellow',
+          label: '',
+          decorations: MultiSelectItemDecorations(
+            decoration: BoxDecoration(
+                color: Colors.yellow,
+                // borderRadius: BorderRadius.circular(20),
+                shape: BoxShape.circle),
+            selectedDecoration: BoxDecoration(
+                color: Colors.yellow,
+                shape: BoxShape.circle,
+                border: Border.all(width: 2)),
+          ),
+          contentPadding: EdgeInsets.all(18),
+        ),
+        MultiSelectCard(
+          value: 'orange',
+          label: '',
+          decorations: MultiSelectItemDecorations(
+            decoration: BoxDecoration(
+                color: Colors.orange,
+                // borderRadius: BorderRadius.circular(20),
+                shape: BoxShape.circle),
+            selectedDecoration: BoxDecoration(
+                color: Colors.orange,
+                shape: BoxShape.circle,
+                border: Border.all(width: 2)),
+          ),
+          contentPadding: EdgeInsets.all(18),
+        ),
+        MultiSelectCard(
+          value: 'pink',
+          label: '',
+          decorations: MultiSelectItemDecorations(
+            decoration: BoxDecoration(
+                color: Colors.pink,
+                // borderRadius: BorderRadius.circular(20),
+                shape: BoxShape.circle),
+            selectedDecoration: BoxDecoration(
+                color: Colors.pink,
+                shape: BoxShape.circle,
+                border: Border.all(width: 2)),
+          ),
+          contentPadding: EdgeInsets.all(18),
+        ),
+        MultiSelectCard(
+          value: 'brown',
+          label: '',
+          decorations: MultiSelectItemDecorations(
+            decoration: BoxDecoration(
+                color: Colors.brown,
+                // borderRadius: BorderRadius.circular(20),
+                shape: BoxShape.circle),
+            selectedDecoration: BoxDecoration(
+                color: Colors.brown,
+                shape: BoxShape.circle,
+                border: Border.all(width: 2)),
+          ),
+          contentPadding: EdgeInsets.all(18),
+        ),
+        MultiSelectCard(
+          value: 'grey',
+          label: '',
+          decorations: MultiSelectItemDecorations(
+            decoration: BoxDecoration(
+                color: Colors.grey,
+                // borderRadius: BorderRadius.circular(20),
+                shape: BoxShape.circle),
+            selectedDecoration: BoxDecoration(
+                color: Colors.grey,
+                shape: BoxShape.circle,
+                border: Border.all(width: 2)),
+          ),
+          contentPadding: EdgeInsets.all(18),
+        ),
+        MultiSelectCard(
+          value: 'black',
+          label: '',
+          decorations: MultiSelectItemDecorations(
+            decoration: BoxDecoration(
+                color: Colors.black,
+                // borderRadius: BorderRadius.circular(20),
+                shape: BoxShape.circle),
+            selectedDecoration: BoxDecoration(
+                color: Colors.black,
+                shape: BoxShape.circle,
+                border: Border.all(width: 2)),
+          ),
+          contentPadding: EdgeInsets.all(18),
+        ),
+      ],
     );
   }
 }
 
-class User {
-  final String? name;
-  final String? avatar;
-  User({this.name, this.avatar});
+class MyMultiSelection extends StatelessWidget {
+  final List<MultiSelectCard<String>> items;
+  const MyMultiSelection({
+    super.key,
+    required this.items,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiSelectContainer(
+      textStyles: MultiSelectTextStyles(
+        textStyle: TextStyle(
+          fontFamily: 'Vazirmatn',
+          fontWeight: FontWeight.bold,
+        ),
+        selectedTextStyle: TextStyle(
+          fontFamily: 'Vazirmatn',
+          fontWeight: FontWeight.bold,
+          color: ColorsManager.blackText,
+        ),
+      ),
+      itemsDecoration: MultiSelectDecorations(
+        decoration: BoxDecoration(
+          color: ColorsManager.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        selectedDecoration: BoxDecoration(
+          color: ColorsManager.unselectedTabGray,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: ColorsManager.blackText, width: 2),
+        ),
+      ),
+      animations: MultiSelectAnimations(
+        decorationAimationDuration: Duration(milliseconds: 100),
+        labelAimationDuration: Duration(milliseconds: 100),
+      ),
+      items: items,
+      onChange: (allSelectedItems, selectedItem) {},
+    );
+  }
 }
 
-List<User> userList = [
-  User(name: "Abigail", avatar: "user.png"),
-  User(name: "Audrey", avatar: "user.png"),
-  User(name: "Ava", avatar: "user.png"),
-  User(name: "Bella", avatar: "user.png"),
-  User(name: "Bernadette", avatar: "user.png"),
-  User(name: "Carol", avatar: "user.png"),
-  User(name: "Claire", avatar: "user.png"),
-  User(name: "Deirdre", avatar: "user.png"),
-  User(name: "Donna", avatar: "user.png"),
-  User(name: "Dorothy", avatar: "user.png"),
-  User(name: "Faith", avatar: "user.png"),
-  User(name: "Gabrielle", avatar: "user.png"),
-  User(name: "Grace", avatar: "user.png"),
-  User(name: "Hannah", avatar: "user.png"),
-  User(name: "Heather", avatar: "user.png"),
-  User(name: "Irene", avatar: "user.png"),
-  User(name: "Jan", avatar: "user.png"),
-  User(name: "Jane", avatar: "user.png"),
-  User(name: "Julia", avatar: "user.png"),
-  User(name: "Kyle", avatar: "user.png"),
-  User(name: "Lauren", avatar: "user.png"),
-  User(name: "Leah", avatar: "user.png"),
-  User(name: "Lisa", avatar: "user.png"),
-  User(name: "Melanie", avatar: "user.png"),
-  User(name: "Natalie", avatar: "user.png"),
-  User(name: "Olivia", avatar: "user.png"),
-  User(name: "Penelope", avatar: "user.png"),
-  User(name: "Rachel", avatar: "user.png"),
-  User(name: "Ruth", avatar: "user.png"),
-  User(name: "Sally", avatar: "user.png"),
-  User(name: "Samantha", avatar: "user.png"),
-  User(name: "Sarah", avatar: "user.png"),
-  User(name: "Theresa", avatar: "user.png"),
-  User(name: "Una", avatar: "user.png"),
-  User(name: "Vanessa", avatar: "user.png"),
-  User(name: "Victoria", avatar: "user.png"),
-  User(name: "Wanda", avatar: "user.png"),
-  User(name: "Wendy", avatar: "user.png"),
-  User(name: "Yvonne", avatar: "user.png"),
-  User(name: "Zoe", avatar: "user.png"),
-];
+class SortOptionsModal extends StatefulWidget {
+  final SortOption? currentSelection;
+  final Function(SortOption) onSelectionChanged;
+
+  const SortOptionsModal({
+    super.key,
+    required this.currentSelection,
+    required this.onSelectionChanged,
+  });
+
+  @override
+  State<SortOptionsModal> createState() => _SortOptionsModalState();
+}
+
+class _SortOptionsModalState extends State<SortOptionsModal> {
+  late SortOption? _selected;
+
+  @override
+  void initState() {
+    super.initState();
+    // Set default selection to SortOption.defaultOption if null
+    _selected = widget.currentSelection ?? SortOption.defaultOption;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: Get.height * 0.5,
+      alignment: Alignment.topCenter,
+      decoration: BoxDecoration(
+        color: ColorsManager.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Header
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox(width: 40), // For balance
+                Text(
+                  'ترتيب',
+                  style: TextStyles.font16BlackBold,
+                ),
+                Container(
+                  height: 37,
+                  width: 37,
+                  decoration: BoxDecoration(
+                    color: ColorsManager.lightGray,
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    onPressed: () => Get.back(),
+                    icon: const Icon(Icons.close, size: 20),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Options List
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: SortOption.values
+                  .map((option) => _buildCustomRadio(option))
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCustomRadio(SortOption option) {
+    bool isSelected = _selected == option;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        color: isSelected ? ColorsManager.secondary.withAlpha(25) : null,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+        title: Text(
+          _getOptionText(option),
+          style: TextStyles.font14BlackBold.copyWith(
+            color:
+                isSelected ? ColorsManager.secondary : ColorsManager.blackText,
+          ),
+        ),
+        trailing: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isSelected
+                // ? const Color.fromARGB(255, 214, 226, 234)
+                ? ColorsManager.secondary.withAlpha(20)
+                : Colors.transparent,
+          ),
+          padding: EdgeInsets.all(3),
+          child: Icon(
+            isSelected ? Icons.check : Icons.circle_outlined,
+            size: 18,
+            color: isSelected ? ColorsManager.secondary : Colors.transparent,
+          ),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        onTap: () {
+          setState(() => _selected = option);
+          widget.onSelectionChanged(option);
+          Get.back();
+        },
+      ),
+    );
+  }
+
+  String _getOptionText(SortOption option) {
+    switch (option) {
+      case SortOption.defaultOption:
+        return "الترتيب الافتراضي";
+      case SortOption.priceLowToHigh:
+        return "الترتيب تنازلي حسب السعر";
+      case SortOption.priceHighToLow:
+        return "الترتيب تصاعدي حسب السعر";
+      case SortOption.newest:
+        return "الترتيب حسب الاحدث";
+      case SortOption.oldest:
+        return "الترتيب حسب الاقدم";
+    }
+  }
+}
+
+// class SortOptionsModal extends StatefulWidget {
+//   final SortOption? currentSelection;
+//   final Function(SortOption) onSelectionChanged;
+
+//   const SortOptionsModal({
+//     super.key,
+//     required this.currentSelection,
+//     required this.onSelectionChanged,
+//   });
+
+//   @override
+//   State<SortOptionsModal> createState() => _SortOptionsModalState();
+// }
+
+// class _SortOptionsModalState extends State<SortOptionsModal> {
+//   late SortOption? _selected;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _selected = widget.currentSelection;
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       height: Get.height * 0.5,
+//       alignment: Alignment.topCenter,
+//       child: Column(
+//         mainAxisSize: MainAxisSize.min,
+//         children: [
+//           Column(
+//             children: [
+//               Padding(
+//                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   children: [
+//                     horizontalSpace(10),
+//                     Text(
+//                       'تصفية نتائج البحث',
+//                       style: TextStyles.font16BlackBold,
+//                       textAlign: TextAlign.center,
+//                       overflow: TextOverflow.ellipsis,
+//                     ),
+//                     Container(
+//                       height: 37,
+//                       width: 37,
+//                       margin: EdgeInsets.only(left: 5),
+//                       decoration: BoxDecoration(
+//                         color: ColorsManager.lightGray,
+//                         shape: BoxShape.circle,
+//                       ),
+//                       child: IconButton(
+//                         onPressed: () => Get.back(),
+//                         icon: Icon(
+//                           Icons.close,
+//                           size: 20,
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ],
+//           ),
+//           const SizedBox(height: 16),
+//           ...SortOption.values.map((option) => RadioListTile<SortOption>(
+//                 title: Text(_getOptionText(option)),
+//                 value: option,
+//                 groupValue: _selected,
+//                 onChanged: (value) {
+//                   setState(() => _selected = value);
+//                   widget.onSelectionChanged(value!);
+//                   Navigator.pop(context);
+//                 },
+//               )),
+//         ],
+//       ),
+//     );
+//   }
+
+//   String _getOptionText(SortOption option) {
+//     switch (option) {
+//       case SortOption.defaultOption:
+//         return "الترتيب الافتراضي";
+//       case SortOption.priceLowToHigh:
+//         return "الترتيب تنازلي حسب السعر";
+//       case SortOption.priceHighToLow:
+//         return "الترتيب تصاعدي حسب السعر";
+//       case SortOption.newest:
+//         return "الترتيب حسب الاحدث";
+//       case SortOption.oldest:
+//         return "الترتيب حسب الاقدم";
+//     }
+//   }
+// }

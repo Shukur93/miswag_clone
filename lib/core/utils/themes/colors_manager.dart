@@ -24,16 +24,18 @@ class ColorsManager {
   static const Color overlayPrimary = Color.fromARGB(255, 255, 54, 60);
   static const Color overlayLightPrimary = Color.fromARGB(255, 255, 244, 244);
   static const Color overlaySecondary = Color.fromARGB(255, 7, 143, 240);
+  static const Color overlayLightSecondary = Color.fromARGB(255, 235, 244, 250);
+  // static const Color overlayLightSecondary = Color.fromARGB(255, 235, 244, 250);
   // static const Color overlayGrayishGreen = Color.fromARGB(255, 168, 187, 175);
 
   // ---- others colors
   static const Color gray = Color(0xFF848388);
-  static const Color unselectedTabGray = Color(0xFF979797);
+  static const Color unselectedTabGray = Color.fromARGB(134, 213, 213, 213);
   static const Color lightGray = Color(0xFFEEEEF0);
   static const Color lighterGray = Color(0xFFEDEDED);
   static const Color moreLightGray = Color(0xFFFDFDFF);
 
-   static const Color containerBackground = Color(0xFFF3F3F5);
+  static const Color containerBackground = Color(0xFFF3F3F5);
 
   // border
   static const Color borderLight = Color(0xFFE1DFEB);
