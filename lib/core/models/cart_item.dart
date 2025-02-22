@@ -1,19 +1,20 @@
-import 'package:miswag_clone/core/models/order/get_items/get_items_response_model.dart';
+
+import 'package:miswag_clone/core/models/product_model.dart';
 
 class CartItem {
-  final ItemsData cartItem;
+  final Product product;
   int quantity;
 
-  CartItem({required this.cartItem, required this.quantity});
+  CartItem({required this.product, required this.quantity});
 
   Map<String, dynamic> toJson() => {
-        'item': cartItem.toJson(),
+        'product': product.toJson(),
         'quantity': quantity,
       };
 
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
-      cartItem: ItemsData.fromJson(json['item']),
+      product: Product.fromJson(json['product']),
       quantity: json['quantity'],
     );
   }

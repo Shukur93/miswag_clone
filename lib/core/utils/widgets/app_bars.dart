@@ -59,7 +59,7 @@ class SecondaryAppBar extends StatelessWidget implements PreferredSizeWidget {
                           cartController.cartItems.length.toString(),
                         )
                       : null,
-                  offset: const Offset(0, 20),
+                  offset: const Offset(6, 12),
                   child: IconButton(
                     onPressed: () {
                       Get.to(() => const CartScreen());

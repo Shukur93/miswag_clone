@@ -5,7 +5,7 @@ import 'package:miswag_clone/core/utils/themes/styles.dart';
 
 class OnEmptyPageContent extends StatelessWidget {
   final String? title;
-  final Icon? icon;
+  final Widget? icon;
   final String? subtitle;
   final void Function()? onTap;
   const OnEmptyPageContent({
@@ -33,15 +33,24 @@ class OnEmptyPageContent extends StatelessWidget {
                   color: ColorsManager.lighterGray,
                   size: 150,
                 ),
-            verticalSpace(5),
-            Text(
-              title ?? 'لا توجد بيانات',
-              style: TextStyles.font14GrayRegular,
-            ),
-            verticalSpace(5),
-            Text(
-              subtitle ?? '',
-              style: TextStyles.font14PrimaryBold,
+            verticalSpace(50),
+            // Spacer(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: Column(
+                children: [
+                  Text(
+                    title ?? 'لا توجد بيانات',
+                    style: TextStyles.font20PrimaryTextBold,
+                  ),
+                  verticalSpace(15),
+                  Text(
+                    subtitle ?? '',
+                    style: TextStyles.font16BlackRegular,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           ],
         ),

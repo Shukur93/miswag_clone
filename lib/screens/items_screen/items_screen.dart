@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:get/get.dart';
+import 'package:miswag_clone/core/controllers/cart/cart_controller.dart';
+import 'package:miswag_clone/core/data/local_data.dart';
 import 'package:miswag_clone/core/utils/helpers/spacing.dart';
 import 'package:miswag_clone/core/utils/helpers/text_formatters.dart';
 import 'package:miswag_clone/core/utils/themes/colors_manager.dart';
@@ -38,6 +40,8 @@ class _ItemsScreenState extends State<ItemsScreen> {
       ),
     );
   }
+
+  final CartController cartController = Get.put(CartController());
 
 // ! BUILD HERE ==--=-============================================
   @override
@@ -120,7 +124,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
             ),
             verticalSpace(15),
             Expanded(
-              child: GridView(
+              child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: 250,
                   mainAxisSpacing: 10,
@@ -136,9 +140,12 @@ class _ItemsScreenState extends State<ItemsScreen> {
                 // ),
                 shrinkWrap: true,
                 padding: EdgeInsets.symmetric(horizontal: 5),
-                children: [
-                  ThumbnailItemCard(),
-                ],
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  return ThumbnailItemCard(
+                    product: products[index],
+                  );
+                },
               ),
             ),
           ],

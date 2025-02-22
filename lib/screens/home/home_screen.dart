@@ -121,8 +121,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icon(Icons.category_outlined),
                   label: 'الأقسام',
                 ),
-                const BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_cart_outlined),
+                BottomNavigationBarItem(
+                  icon: Obx(
+                    () => Badge(
+                      backgroundColor: ColorsManager.primary,
+                      isLabelVisible:
+                          cartController.cartItems.isNotEmpty ? true : false,
+                      label: cartController.cartItems.isNotEmpty
+                          ? Text(
+                              cartController.cartItems.length.toString(),
+                            )
+                          : null,
+                      offset: const Offset(-8, 0),
+                      child: Icon(Icons.shopping_cart_outlined),
+                    ),
+                  ),
                   label: 'السلة',
                 ),
                 const BottomNavigationBarItem(

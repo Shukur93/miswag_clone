@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:miswag_clone/core/controllers/cart/cart_controller.dart';
+import 'package:miswag_clone/core/controllers/favorite/favorite_controller.dart';
+import 'package:miswag_clone/core/models/product_model.dart';
 import 'package:miswag_clone/core/utils/helpers/spacing.dart';
 import 'package:miswag_clone/core/utils/themes/colors_manager.dart';
 import 'package:miswag_clone/core/utils/themes/styles.dart';
+import 'package:miswag_clone/core/utils/widgets/tiny_icon_button.dart';
 
 class ThumbnailItemCard extends StatefulWidget {
+  final Product product;
   const ThumbnailItemCard({
     super.key,
+    required this.product,
   });
 
   @override
@@ -13,7 +20,9 @@ class ThumbnailItemCard extends StatefulWidget {
 }
 
 class _ThumbnailItemCardState extends State<ThumbnailItemCard> {
-  bool isFavorite = false;
+  // bool isFavorite = false;
+  final CartController cartController = Get.find();
+  final FavoriteController favoriteController = Get.put(FavoriteController());
 
   @override
   Widget build(BuildContext context) {
@@ -47,27 +56,24 @@ class _ThumbnailItemCardState extends State<ThumbnailItemCard> {
                 child: Stack(
                   children: [
                     Image.asset(
-                      'assets/images/item1.png',
+                      widget.product.imageUrl,
                       width: double.infinity,
                     ),
+                    // New label
                     Positioned(
                       top: 10,
                       left: 10,
-                      child: Container(
-                        // height: 20,
-                        padding: EdgeInsets.only(
-                            top: 2, left: 5, right: 5, bottom: 2),
-                        decoration: BoxDecoration(
-                          color: Colors.green.withAlpha(40),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text('جديد', style: TextStyle(
-                          color: Colors.green,
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                        ),),
-                      ),
+                      child: NewLabel(),
                     ),
+                    // Discount label
+                    if (widget.product.oldPrice! > 0)
+                      Positioned(
+                        top: 10,
+                        right: 10,
+                        child: DiscountLabel(
+                          discountPercentage: 10,
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -78,29 +84,48 @@ class _ThumbnailItemCardState extends State<ThumbnailItemCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      tinyIconButton(
-                        icon: Icon(
-                          isFavorite ? Icons.favorite : Icons.favorite_outline,
-                          size: 18,
-                          color: isFavorite ? ColorsManager.primary : null,
+                  Obx(
+                    () => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TinyIconButton(
+                          icon: Icon(
+                            favoriteController
+                                    .isProductInFavorites(widget.product)
+                                ? Icons.favorite
+                                : Icons.favorite_outline,
+                            size: 18,
+                            color: favoriteController
+                                    .isProductInFavorites(widget.product)
+                                ? ColorsManager.primary
+                                : null,
+                          ),
+                          onPressed: () {
+                            favoritesHandler();
+                          },
                         ),
-                        onPressed: () {
-                          setState(() {
-                            isFavorite = !isFavorite;
-                          });
-                        },
-                      ),
-                      tinyIconButton(
-                        icon: Icon(
-                          Icons.add_shopping_cart_outlined,
-                          size: 18,
+                        TinyIconButton(
+                          icon: Icon(
+                            Icons.add_shopping_cart_outlined,
+                            size: 18,
+                          ),
+                          onPressed: () {
+                            cartController.addToCart(
+                              widget.product,
+                              1,
+                            );
+                            Get.snackbar(
+                              snackPosition: SnackPosition.TOP,
+                              icon: Icon(Icons.check, color: Colors.white),
+                              'تم إضافة المنتج إلى السلة',
+                              '',
+                              backgroundColor: Colors.green,
+                              colorText: Colors.white,
+                            );
+                          },
                         ),
-                        onPressed: () {},
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   verticalSpace(10),
                   Text(
@@ -125,30 +150,63 @@ class _ThumbnailItemCardState extends State<ThumbnailItemCard> {
     );
   }
 
-  Container tinyIconButton({
-    required Widget icon,
-    required void Function() onPressed,
-  }) {
+  void favoritesHandler() {
+    if (favoriteController.isProductInFavorites(widget.product)) {
+      favoriteController.removeFromFavorites(widget.product);
+    } else {
+      favoriteController.addToFavorites(widget.product);
+    }
+  }
+}
+
+class NewLabel extends StatelessWidget {
+  const NewLabel({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      width: 33,
-      height: 33,
-      alignment: Alignment.center,
+      // height: 20,
+      padding: EdgeInsets.only(top: 2, left: 5, right: 5, bottom: 2),
       decoration: BoxDecoration(
-        color: Colors.white,
-        // borderRadius: BorderRadius.circular(5),
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(20),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
+        color: Colors.green.withAlpha(40),
+        borderRadius: BorderRadius.circular(10),
       ),
-      child: IconButton(
-        padding: EdgeInsets.zero,
-        icon: icon,
-        onPressed: onPressed,
+      child: Text(
+        'جديد',
+        style: TextStyle(
+          color: Colors.green,
+          fontSize: 13,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
+
+class DiscountLabel extends StatelessWidget {
+  final int discountPercentage;
+  const DiscountLabel({
+    super.key,
+    required this.discountPercentage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(top: 2, left: 5, right: 5, bottom: 0),
+      decoration: BoxDecoration(
+        color: ColorsManager.primary,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text(
+        'خصم $discountPercentage%',
+        style: TextStyle(
+          color: ColorsManager.white,
+          fontSize: 13,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

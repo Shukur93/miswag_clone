@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:miswag_clone/core/controllers/cart/cart_controller.dart';
+import 'package:miswag_clone/core/models/product_model.dart';
 import 'package:miswag_clone/core/utils/helpers/spacing.dart';
 import 'package:miswag_clone/core/utils/themes/colors_manager.dart';
 import 'package:miswag_clone/core/utils/widgets/search_bar_engine.dart';
@@ -14,56 +16,17 @@ class HomeScreenContent extends StatefulWidget {
 }
 
 class _HomeScreenContentState extends State<HomeScreenContent> {
-  // final connectivityController = Get.put(ConnectivityController());
-
   // search controller
   final TextEditingController searchController = TextEditingController();
-
-  // static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-  // Map<String, dynamic> _deviceData = <String, dynamic>{};
-  // String deviceId = '';
-  // var _androidIdPlugin = AndroidId();
 
   @override
   void initState() {
     super.initState();
   }
 
-  // Future<void> initPlatformState() async {
-  //   var deviceData = <String, dynamic>{};
+  final CartController cartController = Get.put(CartController());
 
-  //   try {
-  //     if (Platform.isAndroid) {
-  //       final AndroidDeviceInfo androidInfo =
-  //           await deviceInfoPlugin.androidInfo;
-  //       // deviceData = _readAndroidBuildData(androidInfo);
-  //       deviceId = await _getAndroidDeviceId(androidInfo);
-  //     } else if (Platform.isIOS) {
-  //       final IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
-  //       // deviceData = _readIosDeviceInfo(iosInfo);
-  //       deviceId = _getIosDeviceId(iosInfo);
-  //     }
-  //   } on PlatformException {
-  //     deviceData = <String, dynamic>{
-  //       'Error:': 'Failed to get platform version.'
-  //     };
-  //   }
 
-  //   if (!mounted) return;
-
-  //   setState(() {
-  //     _deviceData = deviceData;
-  //   });
-  // }
-
-  // Future<String> _getAndroidDeviceId(AndroidDeviceInfo build) async {
-  //   // return build.id;
-  //   return await _androidIdPlugin.getId() ?? '';
-  // }
-
-  // String _getIosDeviceId(IosDeviceInfo data) {
-  //   return data.identifierForVendor ?? '';
-  // }
 
   @override
   Widget build(BuildContext context) {
