@@ -30,12 +30,12 @@ class _CartScreenState extends State<CartScreen> {
             if (cartController.cartItems.isEmpty) {
               return OnEmptyPageContent(
                 icon: Image.asset(
-                  'assets/icons/empty_fav.jpg',
+                  'assets/icons/empty_cart.jpg',
                   width: 200,
                 ),
-                title: 'المفضلة فارغة',
+                title: 'السلة فارغة',
                 subtitle:
-                    "يمكنك حفظ منتجاتك المفضلة لشرائها لاحقاً من خلال الضغط على رمز المفضلة",
+                    "استكشف المنتجات المتوفرة على مسواگ\nواضف للسلة لبدء التسوق",
               );
             }
             return ListView.separated(
@@ -64,39 +64,41 @@ class _CartScreenState extends State<CartScreen> {
                 decoration: BoxDecoration(
                   border: Border(top: BorderSide(color: Colors.grey.shade300)),
                 ),
-                child: Column(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            'المجموع:',
-                            style: TextStyles.font16BlackRegular,
-                            textDirection: TextDirection.rtl,
-                          ),
+                    Flexible(
+                      child: Container(
+                        height: 52,
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: ColorsManager.grayishGreen.withAlpha(50)),
+                        child: Text(
+                          '${thousandFormatter(cartController.totalPrice)} د.ع',
+                          style: TextStyles.font14BlackBold,
+                          textDirection: TextDirection.rtl,
                         ),
-                        Flexible(
-                          child: Text(
-                            '${thousandFormatter(cartController.totalPrice)} دينار',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textDirection: TextDirection.rtl,
-                          ),
+                      ),
+                    ),
+                    horizontalSpace(10),
+                    Flexible(
+                      flex: 2,
+                      child: AppTextButton(
+                        buttonText: "شراء المنتجات",
+                        backgroundColor: ColorsManager.secondary,
+                        icon: Icon(
+                          Icons.chevron_right_outlined,
+                          color: ColorsManager.white,
+                          size: 30,
                         ),
-                      ],
+                        isWithIcon: true,
+                        isIconLeft: true,
+                        onPressed: () {},
+                      ),
                     ),
-                    verticalSpace(30),
-                    AppTextButton(
-                      buttonText: 'اتمام الطلب',
-                      onPressed: () {},
-                    ),
-                    verticalSpace(30),
                   ],
                 ),
               ),

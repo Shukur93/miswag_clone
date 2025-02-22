@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:miswag_clone/core/controllers/bottom_navbar/bottom_navbar_controller.dart';
 import 'package:miswag_clone/core/controllers/cart/cart_controller.dart';
 import 'package:miswag_clone/core/utils/helpers/spacing.dart';
 import 'package:miswag_clone/core/utils/themes/colors_manager.dart';
 import 'package:miswag_clone/core/utils/themes/styles.dart';
 import 'package:miswag_clone/screens/cart/cart_screen.dart';
+import 'package:miswag_clone/screens/home/home_screen.dart';
 
 class SecondaryAppBar extends StatelessWidget implements PreferredSizeWidget {
-  SecondaryAppBar({super.key});
+  final bool isSingleItem;
+  SecondaryAppBar({super.key, this.isSingleItem = false});
 
   final CartController cartController = Get.put(CartController());
+  final BottomNavController bottomNavController = Get.find();
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -32,23 +36,33 @@ class SecondaryAppBar extends StatelessWidget implements PreferredSizeWidget {
                     Icons.arrow_back_ios_new_rounded,
                   ),
                   Text(
-                    'رجوع',
+                    isSingleItem ? 'وصل حديثاً' : 'رجوع',
                     style: TextStyles.font15BlackRegular,
                   ),
                 ],
               ),
             ),
           ),
-          Flexible(
-            flex: 2,
-            child: Text(
-              'وصل حديثاً',
-              style: TextStyles.font16BlackBold,
-              overflow: TextOverflow.ellipsis,
+          if (!isSingleItem)
+            Flexible(
+              flex: 2,
+              child: Text(
+                'وصل حديثاً',
+                style: TextStyles.font16BlackBold,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-          ),
           Row(
             children: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.search,
+                  size: 23,
+                  color: ColorsManager.primaryText,
+                ),
+                padding: EdgeInsets.zero,
+              ),
               Obx(
                 () => Badge(
                   backgroundColor: ColorsManager.primary,
@@ -62,7 +76,8 @@ class SecondaryAppBar extends StatelessWidget implements PreferredSizeWidget {
                   offset: const Offset(6, 12),
                   child: IconButton(
                     onPressed: () {
-                      Get.to(() => const CartScreen());
+                      Get.to(() => HomeScreen());
+                      bottomNavController.currentIndex.value = 2;
                     },
                     icon: const Icon(
                       Icons.shopping_cart_outlined,

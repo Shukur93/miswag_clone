@@ -4,9 +4,11 @@ import 'package:miswag_clone/core/controllers/cart/cart_controller.dart';
 import 'package:miswag_clone/core/controllers/favorite/favorite_controller.dart';
 import 'package:miswag_clone/core/models/product_model.dart';
 import 'package:miswag_clone/core/utils/helpers/spacing.dart';
+import 'package:miswag_clone/core/utils/helpers/text_formatters.dart';
 import 'package:miswag_clone/core/utils/themes/colors_manager.dart';
 import 'package:miswag_clone/core/utils/themes/styles.dart';
 import 'package:miswag_clone/core/utils/widgets/tiny_icon_button.dart';
+import 'package:miswag_clone/screens/items_screen/single_item_screen.dart';
 
 class ThumbnailItemCard extends StatefulWidget {
   final Product product;
@@ -27,7 +29,7 @@ class _ThumbnailItemCardState extends State<ThumbnailItemCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => (),
+      onTap: () => Get.to(() =>  SingleItemScreen(product: widget.product,)),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -129,17 +131,22 @@ class _ThumbnailItemCardState extends State<ThumbnailItemCard> {
                   ),
                   verticalSpace(10),
                   Text(
-                    'قلاية هوائية 6 لتر 1500 واط Air Fryer',
+                    widget.product.name,
                     style: TextStyles.font13BlackBold,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   verticalSpace(10),
+                  // old price
+                  if (widget.product.oldPrice! > 0)
+                    Text(
+                      thousandFormatter(widget.product.oldPrice!),
+                      style: TextStyle(decoration: TextDecoration.lineThrough),
+                    ),
                   Text(
-                    '١٢١٬٠٠٠',
-                    style: TextStyle(decoration: TextDecoration.lineThrough),
-                  ),
-                  Text(
-                    '٧٢٬٦٠٠ د.ع',
+                    '${thousandFormatter(widget.product.price)} د.ع',
                     style: TextStyles.font16BlackBold,
+                    overflow: TextOverflow.ellipsis,
                   )
                 ],
               ),

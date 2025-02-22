@@ -131,6 +131,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                   crossAxisSpacing: 10,
                   childAspectRatio: 0.65,
                 ),
+                
 
                 //     const SliverGridDelegateWithFixedCrossAxisCount(
                 //   crossAxisCount: 2,
@@ -139,7 +140,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                 //   childAspectRatio: 0.75,
                 // ),
                 shrinkWrap: true,
-                padding: EdgeInsets.symmetric(horizontal: 5),
+                padding: EdgeInsets.only(right: 10, left: 10, bottom: 50),
                 itemCount: products.length,
                 itemBuilder: (context, index) {
                   return ThumbnailItemCard(
@@ -148,6 +149,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                 },
               ),
             ),
+         
           ],
         ),
       ),

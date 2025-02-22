@@ -5,16 +5,18 @@ class TinyIconButton extends StatelessWidget {
     super.key,
     required this.icon,
     required this.onPressed,
+    this.containerSize = 33,
   });
 
   final Widget icon;
   final void Function() onPressed;
+  final double containerSize;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 33,
-      height: 33,
+      width: containerSize,
+      height: containerSize,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: Colors.white,

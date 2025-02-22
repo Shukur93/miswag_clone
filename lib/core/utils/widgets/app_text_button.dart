@@ -17,6 +17,7 @@ class AppTextButton extends StatelessWidget {
   final bool isDisabled;
   final Widget? icon;
   final bool isWithIcon;
+  final bool isIconLeft;
   final WidgetStateProperty<Color?>? overlayColor;
   const AppTextButton({
     super.key,
@@ -34,6 +35,7 @@ class AppTextButton extends StatelessWidget {
     this.icon,
     this.isWithIcon = false,
     this.overlayColor,
+    this.isIconLeft = false,
   });
 
   @override
@@ -43,7 +45,7 @@ class AppTextButton extends StatelessWidget {
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
-              borderRadius ?? 16.0,
+              borderRadius ?? 12.0,
             ),
             side: BorderSide(
               color: isDisabled
@@ -60,13 +62,14 @@ class AppTextButton extends StatelessWidget {
                   ? Colors.white
                   : backgroundColor ?? ColorsManager.primary,
         ),
-        overlayColor: overlayColor ?? WidgetStatePropertyAll(
-          isDisabled
-              ? Colors.transparent
-              : isOutlinedBtn
-                  ? ColorsManager.overlayLightSecondary
-                  : ColorsManager.overlaySecondary,
-        ),
+        overlayColor: overlayColor ??
+            WidgetStatePropertyAll(
+              isDisabled
+                  ? Colors.transparent
+                  : isOutlinedBtn
+                      ? ColorsManager.overlayLightSecondary
+                      : ColorsManager.overlaySecondary,
+            ),
         padding: WidgetStateProperty.all<EdgeInsets>(
           EdgeInsets.symmetric(
             horizontal: horizontalPadding ?? 12,
@@ -82,24 +85,49 @@ class AppTextButton extends StatelessWidget {
       ),
       onPressed: isDisabled ? () {} : onPressed,
       child: isWithIcon
-          ? Text.rich(
-              TextSpan(
+          ? Padding(
+              padding: EdgeInsets.only(right: isIconLeft ? 10 : 0),
+              child: Row(
+                mainAxisAlignment: isIconLeft
+                    ? MainAxisAlignment.spaceBetween
+                    : MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  WidgetSpan(
-                    alignment: PlaceholderAlignment.middle,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 12.0),
-                      child: icon,
-                    ),
+                  if (!isIconLeft) Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: icon!,
                   ),
-                  TextSpan(
-                    text: buttonText,
+                  Text(
+                    buttonText,
                     style: textStyle ?? TextStyles.font16WhiteBold,
                   ),
+                  if (isIconLeft) icon!,
                 ],
               ),
-              textAlign: TextAlign.center,
             )
+
+          //  Text.rich(
+          //     textDirection: isIconLeft ? TextDirection.ltr : TextDirection.rtl,
+          //     TextSpan(
+          //       children: [
+          //         WidgetSpan(
+          //           alignment: PlaceholderAlignment.middle,
+          //           child: Padding(
+          //             padding: EdgeInsets.only(
+          //               left: isIconLeft ? 0 : 12.0,
+          //               right: isIconLeft ? 10.0 : 0,
+          //             ),
+          //             child: icon,
+          //           ),
+          //         ),
+          //         TextSpan(
+          //           text: buttonText,
+          //           style: textStyle ?? TextStyles.font16WhiteBold,
+          //         ),
+          //       ],
+          //     ),
+          //     textAlign: TextAlign.center,
+          //   )
           : Text(
               buttonText,
               style: textStyle ?? TextStyles.font16WhiteBold,

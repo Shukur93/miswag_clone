@@ -178,6 +178,12 @@ class TextStyles {
     color: ColorsManager.blackText,
   );
 
+  static TextStyle font24BlackRegular = const TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeightHelper.regular,
+    color: ColorsManager.blackText,
+  );
+
   static TextStyle font14WhiteBold = const TextStyle(
     fontSize: 14,
     fontWeight: FontWeightHelper.bold,
