@@ -29,7 +29,9 @@ class _ThumbnailItemCardState extends State<ThumbnailItemCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.to(() =>  SingleItemScreen(product: widget.product,)),
+      onTap: () => Get.to(() => SingleItemScreen(
+            product: widget.product,
+          )),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -194,9 +196,13 @@ class NewLabel extends StatelessWidget {
 
 class DiscountLabel extends StatelessWidget {
   final int discountPercentage;
+  final double? fontSize;
+  final bool isMinimal;
   const DiscountLabel({
     super.key,
     required this.discountPercentage,
+    this.fontSize,
+    this.isMinimal = false,
   });
 
   @override
@@ -207,14 +213,23 @@ class DiscountLabel extends StatelessWidget {
         color: ColorsManager.primary,
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Text(
-        'خصم $discountPercentage%',
-        style: TextStyle(
-          color: ColorsManager.white,
-          fontSize: 13,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+      child: isMinimal
+          ? Text(
+              '$discountPercentage%- ',
+              style: TextStyle(
+                color: ColorsManager.white,
+                fontSize: fontSize ?? 13,
+                fontWeight: FontWeight.bold,
+              ),
+            )
+          : Text(
+              'خصم $discountPercentage%',
+              style: TextStyle(
+                color: ColorsManager.white,
+                fontSize: fontSize ?? 13,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
     );
   }
 }

@@ -35,26 +35,27 @@ class ProfileLetterIcon extends StatelessWidget {
             width: circleSize ?? 40,
             height: circleSize ?? 40,
             decoration: ShapeDecoration(
-              color: color ?? (isColored ? null : ColorsManager.primary),
-              shape: const OvalBorder(),
-              gradient: isColored
-                  ? const LinearGradient(
-                      colors: [
-                        ColorsManager.disableText,
-                        ColorsManager.primary
-                      ],
-                      begin: FractionalOffset(-0.1, 0.1),
-                      end: FractionalOffset(0.1, 1.0),
-                      stops: [0.0, 1.0],
-                      tileMode: TileMode.clamp,
-                    )
-                  : null,
+              color: color ??
+                  (isColored ? null : const Color.fromARGB(255, 170, 16, 21)),
+              shape: const OvalBorder(
+                side: BorderSide(
+                    color: Colors.white,
+                    width: 2,
+                    strokeAlign: BorderSide.strokeAlignOutside),
+              ),
             ),
-            child: Text(
-              // get the first letter of a given name
-              name.isNotEmpty ? name.substring(0, 1).toUpperCase() : '',
-              style: textStyle ?? TextStyles.font20WhiteMedium,
-              textAlign: TextAlign.center,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Text(
+                // get the first letter of a given name
+                name.isNotEmpty ? name.substring(0, 1).toUpperCase() : '',
+                style: textStyle ??
+                    TextStyle(
+                        color: Colors.white.withAlpha(200),
+                        height: 0,
+                        fontSize: 12),
+                textAlign: TextAlign.center,
+              ),
             ),
           );
   }

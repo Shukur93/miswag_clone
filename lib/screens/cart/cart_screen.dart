@@ -55,10 +55,10 @@ class _CartScreenState extends State<CartScreen> {
           },
         ),
       ),
-      bottomNavigationBar: cartController.cartItems.isEmpty
-          ? null
-          : Obx(
-              () => Container(
+      bottomNavigationBar: Obx(
+        () => cartController.cartItems.isEmpty
+            ? SizedBox()
+            : Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                 decoration: BoxDecoration(
@@ -102,7 +102,7 @@ class _CartScreenState extends State<CartScreen> {
                   ],
                 ),
               ),
-            ),
+      ),
     );
   }
 }

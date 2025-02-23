@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:get/get.dart';
 import 'package:miswag_clone/core/controllers/cart/cart_controller.dart';
-import 'package:miswag_clone/core/data/local_data.dart';
+import 'package:miswag_clone/core/data/products.dart';
 import 'package:miswag_clone/core/utils/helpers/spacing.dart';
 import 'package:miswag_clone/core/utils/helpers/text_formatters.dart';
 import 'package:miswag_clone/core/utils/themes/colors_manager.dart';
@@ -10,6 +10,7 @@ import 'package:miswag_clone/core/utils/themes/styles.dart';
 import 'package:miswag_clone/core/utils/widgets/app_bars.dart';
 import 'package:miswag_clone/core/utils/widgets/app_text_button.dart';
 import 'package:miswag_clone/core/utils/widgets/show_modal_sheet.dart';
+import 'package:miswag_clone/screens/items_screen/widgets/list_item_card.dart';
 import 'package:miswag_clone/screens/items_screen/widgets/thumbnail_item_card.dart';
 
 enum SortOption {
@@ -19,6 +20,8 @@ enum SortOption {
   newest,
   oldest,
 }
+
+enum ViewMode { grid, list }
 
 class ItemsScreen extends StatefulWidget {
   const ItemsScreen({super.key});
@@ -30,6 +33,15 @@ class ItemsScreen extends StatefulWidget {
 class _ItemsScreenState extends State<ItemsScreen> {
   SortOption? _selectedSort;
 
+  ViewMode _viewMode = ViewMode.grid; // Add view mode state
+  final CartController cartController = Get.put(CartController());
+
+  void _toggleViewMode() {
+    setState(() {
+      _viewMode = _viewMode == ViewMode.grid ? ViewMode.list : ViewMode.grid;
+    });
+  }
+
   void _openSortModal() {
     showModal(
       SortOptionsModal(
@@ -40,8 +52,6 @@ class _ItemsScreenState extends State<ItemsScreen> {
       ),
     );
   }
-
-  final CartController cartController = Get.put(CartController());
 
 // ! BUILD HERE ==--=-============================================
   @override
@@ -113,43 +123,74 @@ class _ItemsScreenState extends State<ItemsScreen> {
                   SizedBox(
                     width: 50,
                     child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.window_outlined,
-                          size: 20,
-                        )),
-                  ),
+                      onPressed: _toggleViewMode,
+                      icon: Icon(
+                        _viewMode == ViewMode.grid
+                            ? Icons.list // Show list icon when in grid view
+                            : Icons
+                                .window_outlined, // Show grid icon when in list view
+                        size: 20,
+                        color: ColorsManager.blackText,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
             verticalSpace(15),
             Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 250,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: 0.65,
-                ),
-                
+                child: _viewMode == ViewMode.grid
+                    ? GridView.builder(
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 250,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 0.65,
+                        ),
+                        shrinkWrap: true,
+                        padding:
+                            EdgeInsets.only(right: 10, left: 10, bottom: 50),
+                        itemCount: products.length,
+                        itemBuilder: (context, index) {
+                          return ThumbnailItemCard(
+                            product: products[index],
+                          );
+                        },
+                      )
+                    : ListView.builder(
+                        padding:
+                            EdgeInsets.only(right: 10, left: 10, bottom: 50),
+                        itemCount: products.length,
+                        itemBuilder: (context, index) {
+                          return ListItemCard(
+                            product: products[index],
+                          );
+                        },
+                      )
+                // child: GridView.builder(
+                //   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                //     maxCrossAxisExtent: 250,
+                //     mainAxisSpacing: 10,
+                //     crossAxisSpacing: 10,
+                //     childAspectRatio: 0.65,
+                //   ),
 
-                //     const SliverGridDelegateWithFixedCrossAxisCount(
-                //   crossAxisCount: 2,
-                //   mainAxisSpacing: 5,
-                //   crossAxisSpacing: 2,
-                //   childAspectRatio: 0.75,
+                //   //     const SliverGridDelegateWithFixedCrossAxisCount(
+                //   //   crossAxisCount: 2,
+                //   //   mainAxisSpacing: 5,
+                //   //   crossAxisSpacing: 2,
+                //   //   childAspectRatio: 0.75,
+                //   // ),
+                //   shrinkWrap: true,
+                //   padding: EdgeInsets.only(right: 10, left: 10, bottom: 50),
+                //   itemCount: products.length,
+                //   itemBuilder: (context, index) {
+                //     return ThumbnailItemCard(
+                //       product: products[index],
+                //     );
+                //   },
                 // ),
-                shrinkWrap: true,
-                padding: EdgeInsets.only(right: 10, left: 10, bottom: 50),
-                itemCount: products.length,
-                itemBuilder: (context, index) {
-                  return ThumbnailItemCard(
-                    product: products[index],
-                  );
-                },
-              ),
-            ),
-         
+                ),
           ],
         ),
       ),
@@ -676,101 +717,3 @@ class _SortOptionsModalState extends State<SortOptionsModal> {
     }
   }
 }
-
-// class SortOptionsModal extends StatefulWidget {
-//   final SortOption? currentSelection;
-//   final Function(SortOption) onSelectionChanged;
-
-//   const SortOptionsModal({
-//     super.key,
-//     required this.currentSelection,
-//     required this.onSelectionChanged,
-//   });
-
-//   @override
-//   State<SortOptionsModal> createState() => _SortOptionsModalState();
-// }
-
-// class _SortOptionsModalState extends State<SortOptionsModal> {
-//   late SortOption? _selected;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _selected = widget.currentSelection;
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       height: Get.height * 0.5,
-//       alignment: Alignment.topCenter,
-//       child: Column(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           Column(
-//             children: [
-//               Padding(
-//                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-//                 child: Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     horizontalSpace(10),
-//                     Text(
-//                       'تصفية نتائج البحث',
-//                       style: TextStyles.font16BlackBold,
-//                       textAlign: TextAlign.center,
-//                       overflow: TextOverflow.ellipsis,
-//                     ),
-//                     Container(
-//                       height: 37,
-//                       width: 37,
-//                       margin: EdgeInsets.only(left: 5),
-//                       decoration: BoxDecoration(
-//                         color: ColorsManager.lightGray,
-//                         shape: BoxShape.circle,
-//                       ),
-//                       child: IconButton(
-//                         onPressed: () => Get.back(),
-//                         icon: Icon(
-//                           Icons.close,
-//                           size: 20,
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ],
-//           ),
-//           const SizedBox(height: 16),
-//           ...SortOption.values.map((option) => RadioListTile<SortOption>(
-//                 title: Text(_getOptionText(option)),
-//                 value: option,
-//                 groupValue: _selected,
-//                 onChanged: (value) {
-//                   setState(() => _selected = value);
-//                   widget.onSelectionChanged(value!);
-//                   Navigator.pop(context);
-//                 },
-//               )),
-//         ],
-//       ),
-//     );
-//   }
-
-//   String _getOptionText(SortOption option) {
-//     switch (option) {
-//       case SortOption.defaultOption:
-//         return "الترتيب الافتراضي";
-//       case SortOption.priceLowToHigh:
-//         return "الترتيب تنازلي حسب السعر";
-//       case SortOption.priceHighToLow:
-//         return "الترتيب تصاعدي حسب السعر";
-//       case SortOption.newest:
-//         return "الترتيب حسب الاحدث";
-//       case SortOption.oldest:
-//         return "الترتيب حسب الاقدم";
-//     }
-//   }
-// }

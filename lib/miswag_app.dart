@@ -6,17 +6,11 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:miswag_clone/core/utils/themes/colors_manager.dart';
 import 'package:miswag_clone/screens/home/home_screen.dart';
-import 'package:miswag_clone/screens/onboarding/splash_screen.dart';
 
 mixin AppLocale {
   static const String title = 'title';
   static const String thisIs = 'thisIs';
 
-  // for Arabic
-  static const Map<String, dynamic> ar = {
-    title: 'التعريب',
-    thisIs: 'هذا هو %a حزمة، الإصدار %a.',
-  };
 
   // static const Map<String, dynamic> en = {
   //   title: 'Localization',

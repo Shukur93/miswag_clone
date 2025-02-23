@@ -24,6 +24,13 @@ class TextStyles {
     height: 1,
   );
 
+   static TextStyle font25PrimaryTextBold = const TextStyle(
+    fontSize: 25,
+    fontWeight: FontWeightHelper.bold,
+    color: ColorsManager.primaryText,
+    height: 1,
+  );
+
   static TextStyle font12PrimaryBold = const TextStyle(
     fontSize: 12,
     fontWeight: FontWeightHelper.bold,
@@ -139,7 +146,7 @@ class TextStyles {
   static TextStyle font14ParagraphRegular = const TextStyle(
     fontSize: 14,
     fontWeight: FontWeightHelper.regular,
-    color: ColorsManager.paragraphText,
+    color: ColorsManager.blackText,
   );
 
   static TextStyle font14BlackBold = const TextStyle(
@@ -355,13 +362,13 @@ class TextStyles {
   static TextStyle font13BlackMedium = const TextStyle(
     fontSize: 13,
     fontWeight: FontWeightHelper.medium,
-    color: ColorsManager.paragraphText,
+    color: ColorsManager.blackText,
   );
 
   static TextStyle font13BlackBold = const TextStyle(
     fontSize: 13,
     fontWeight: FontWeightHelper.bold,
-    color: ColorsManager.paragraphText,
+    color: ColorsManager.blackText,
   );
 
   static TextStyle font10PrimaryLight = const TextStyle(

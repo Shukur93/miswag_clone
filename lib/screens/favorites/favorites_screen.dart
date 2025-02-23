@@ -3,10 +3,8 @@ import 'package:get/get.dart';
 import 'package:miswag_clone/core/controllers/favorite/favorite_controller.dart';
 import 'package:miswag_clone/core/utils/helpers/spacing.dart';
 import 'package:miswag_clone/core/utils/themes/colors_manager.dart';
-import 'package:miswag_clone/core/utils/widgets/app_text_button.dart';
 import 'package:miswag_clone/core/utils/widgets/on_empty_content.dart';
 import 'package:miswag_clone/screens/favorites/widgets/favorite_card.dart';
-import 'package:miswag_clone/screens/home/home_screen.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});

@@ -10,7 +10,7 @@ class ColorsManager {
   static const Color primaryText = Color(0xFF444444);
   static const Color secondaryText = Color(0xFF919191);
   static const Color paragraphText = Color(0xFF444444);
-  static const Color blackText = Color(0xFF3F3F3F);
+  static const Color blackText = Color.fromARGB(255, 0, 0, 0);
   static const Color headerText = Color(0xFF616161);
   static const Color disableText = Color(0xFFc2c2c2);
   static const Color lightPrimary = Color.fromARGB(255, 214, 229, 220);

@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:miswag_clone/core/controllers/bottom_navbar/bottom_navbar_controller.dart';
 import 'package:miswag_clone/core/controllers/cart/cart_controller.dart';
-
 import 'package:miswag_clone/core/utils/helpers/spacing.dart';
 import 'package:miswag_clone/core/utils/themes/colors_manager.dart';
 import 'package:miswag_clone/core/utils/themes/styles.dart';
-import 'package:miswag_clone/core/utils/widgets/search_bar_engine.dart';
+import 'package:miswag_clone/core/utils/widgets/profile_letter_icon.dart';
+import 'package:miswag_clone/core/utils/widgets/show_modal_sheet.dart';
+import 'package:miswag_clone/core/utils/widgets/start_chatting.dart';
 import 'package:miswag_clone/screens/cart/cart_screen.dart';
 import 'package:miswag_clone/screens/categories/categories_screen.dart';
 import 'package:miswag_clone/screens/favorites/favorites_screen.dart';
@@ -47,9 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
     // ** ============= Home Screen Tabs ============= ** //
     List<Widget> widgetOptions = <Widget>[
       const HomeScreenContent(),
-      const CategoriesScreen(),
+      const CategoryScreen(),
       const CartScreen(),
-      const MoreScreen(),
+      MoreScreen(),
     ];
     //
     //
@@ -157,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: true,
-      toolbarHeight: 110,
+
       title: Column(
         children: [
           Row(
@@ -177,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     icon: Icon(Icons.favorite_outline),
                   ),
                   IconButton(
-                    onPressed: () => Get.to(() => FavoritesScreen()),
+                    onPressed: () => showModal(StartChatting()),
                     icon: Icon(Icons.forum_outlined),
                   ),
                   // horizontalSpace(10),
@@ -185,8 +186,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          verticalSpace(5),
-          SearchBarEngine(),
         ],
       ),
       // actions: [
