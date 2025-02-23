@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:miswag_clone/core/controllers/bottom_navbar/bottom_navbar_controller.dart';
 import 'package:miswag_clone/core/controllers/cart/cart_controller.dart';
-import 'package:miswag_clone/core/utils/helpers/spacing.dart';
 import 'package:miswag_clone/core/utils/themes/colors_manager.dart';
 import 'package:miswag_clone/core/utils/themes/styles.dart';
-import 'package:miswag_clone/screens/cart/cart_screen.dart';
 import 'package:miswag_clone/screens/home/home_screen.dart';
 
 class SecondaryAppBar extends StatelessWidget implements PreferredSizeWidget {

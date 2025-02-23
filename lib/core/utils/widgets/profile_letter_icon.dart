@@ -1,8 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:miswag_clone/core/utils/themes/colors_manager.dart';
-import 'package:miswag_clone/core/utils/themes/styles.dart';
-import 'package:miswag_clone/core/utils/widgets/shimmer_placeholders.dart';
 
 class ProfileLetterIcon extends StatelessWidget {
   final String name;
@@ -28,9 +25,7 @@ class ProfileLetterIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? const ShimmerCirclePlaceholder()
-        : Container(
+    return Container(
             alignment: Alignment.center,
             width: circleSize ?? 40,
             height: circleSize ?? 40,

@@ -1,16 +1,23 @@
-# miswag_clone
+# Miswag Clone - By Shukur
 
-A new Flutter project.
+A pixel-perfect clone with GetX state management, local data, and core e-commerce features.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- **GetX State Management**: Controllers for cart, favorites, and UI state
+- **Cart System**: Add/remove items, quantity control, total calculation
+- **Favorites**: Save/remove favorite products with persistence
+- **Local Data**: Product catalog loaded from local JSON files
+- **Animations**: Custom page transitions and UI interactions
+- **Multi-tab Layout**: Organized "More" screen with multiple sections
 
-A few resources to get you started if this is your first Flutter project:
+## Project Architecture
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+lib/
+├── models/ # Data models (Product, User, CartItem)
+├── lib/core/controllers/ # # GetX controllers
+├── screens/ # App screens (Home, Items, Cart .. etc)
+├── lib/core/data/ # Local Data services (load dummy Data)
+├── lib/core/utils/ # Constants, helpers, routes and widgets
+├── widgets/ # Reusable components (ProductCard, AppBar)
+└── main.dart # App entry point

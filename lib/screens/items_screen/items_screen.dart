@@ -166,31 +166,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                             product: products[index],
                           );
                         },
-                      )
-                // child: GridView.builder(
-                //   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                //     maxCrossAxisExtent: 250,
-                //     mainAxisSpacing: 10,
-                //     crossAxisSpacing: 10,
-                //     childAspectRatio: 0.65,
-                //   ),
-
-                //   //     const SliverGridDelegateWithFixedCrossAxisCount(
-                //   //   crossAxisCount: 2,
-                //   //   mainAxisSpacing: 5,
-                //   //   crossAxisSpacing: 2,
-                //   //   childAspectRatio: 0.75,
-                //   // ),
-                //   shrinkWrap: true,
-                //   padding: EdgeInsets.only(right: 10, left: 10, bottom: 50),
-                //   itemCount: products.length,
-                //   itemBuilder: (context, index) {
-                //     return ThumbnailItemCard(
-                //       product: products[index],
-                //     );
-                //   },
-                // ),
-                ),
+                      )),
           ],
         ),
       ),

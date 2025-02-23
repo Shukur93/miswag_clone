@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:miswag_clone/core/controllers/bottom_navbar/bottom_navbar_controller.dart';
 import 'package:miswag_clone/core/controllers/cart/cart_controller.dart';
-import 'package:miswag_clone/core/utils/helpers/spacing.dart';
 import 'package:miswag_clone/core/utils/themes/colors_manager.dart';
 import 'package:miswag_clone/core/utils/themes/styles.dart';
-import 'package:miswag_clone/core/utils/widgets/profile_letter_icon.dart';
 import 'package:miswag_clone/core/utils/widgets/show_modal_sheet.dart';
 import 'package:miswag_clone/core/utils/widgets/start_chatting.dart';
 import 'package:miswag_clone/screens/cart/cart_screen.dart';
@@ -26,22 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
       Get.put(BottomNavController());
   final CartController cartController = Get.put(CartController());
 
-  // int _selectedIndex = 0;
-
   void _onItemTapped(int index) =>
       setState(() => bottomNavController.currentIndex.value = index);
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,41 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
-          // floatingActionButton: FloatingActionButton(
-          //   onPressed: () {
-          //     Get.snackbar(
-          //       icon: const Padding(
-          //          padding: EdgeInsets.only(right: 30),
-          //         child: Icon(Icons.error_outline, color: Colors.white, size: 28,),
-          //       ),
-          //       "Economy غير متوفر",
-          //       '400',
-          //       // padding: const EdgeInsets.only(right: 30),
-          //       snackPosition: SnackPosition.TOP,
-          //       duration: const Duration(seconds: 5),
-          //       borderRadius: 13,
-          //       backgroundColor: Colors.red,
-          //       colorText: ColorsManager.white,
-          //     );
-          //   }, // Navigate to SearchScreen
-          //   child: const Icon(Icons.search),
-          // ),
-
-          //
-          // floatingActionButton: FloatingActionButton(
-          //   onPressed: () {
-          //     showModal(
-          //       // isDismissible: false,
-          //       showSuccessPayment(),
-          //     );
-          //   },
-          //   child: const Icon(Icons.check_circle_outline),
-          // ),
-          //
-          //
-          // app bar
           appBar: myAppBar(),
-
           body: Obx(
             () => Container(
               child: widgetOptions
@@ -104,8 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
             () => BottomNavigationBar(
               backgroundColor: ColorsManager.white,
               currentIndex: bottomNavController.currentIndex.value,
-              // selectedItemColor: ColorsManager.white,
-              // unselectedItemColor: ColorsManager.white.withOpacity(0.5),.
               selectedItemColor: ColorsManager.primary,
               unselectedItemColor: ColorsManager.primaryText,
               type: BottomNavigationBarType.fixed,
@@ -114,13 +62,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   TextStyles.font14primaryTextMedium.copyWith(height: 1.25),
               onTap: _onItemTapped,
               items: <BottomNavigationBarItem>[
-                const BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined),
+                BottomNavigationBarItem(
+                  icon: Obx(() => Icon(
+                        bottomNavController.currentIndex.value == 0
+                            ? Icons.home
+                            : Icons.home_outlined,
+                      )),
                   label: 'الرئيسية',
                 ),
-                const BottomNavigationBarItem(
-                  icon: Icon(Icons.category_outlined),
-                  label: 'الأقسام',
+                BottomNavigationBarItem(
+                  icon: Obx(() => Icon(
+                        bottomNavController.currentIndex.value == 1
+                            ? Icons.category
+                            : Icons.category_outlined,
+                      )),
+                  label: 'الاقسام',
                 ),
                 BottomNavigationBarItem(
                   icon: Obx(
@@ -129,18 +85,24 @@ class _HomeScreenState extends State<HomeScreen> {
                       isLabelVisible:
                           cartController.cartItems.isNotEmpty ? true : false,
                       label: cartController.cartItems.isNotEmpty
-                          ? Text(
-                              cartController.cartItems.length.toString(),
-                            )
+                          ? Text(cartController.cartItems.length.toString())
                           : null,
                       offset: const Offset(-8, 0),
-                      child: Icon(Icons.shopping_cart_outlined),
+                      child: Icon(
+                        bottomNavController.currentIndex.value == 2
+                            ? Icons.shopping_cart
+                            : Icons.shopping_cart_outlined,
+                      ),
                     ),
                   ),
                   label: 'السلة',
                 ),
-                const BottomNavigationBarItem(
-                  icon: Icon(Icons.more_outlined),
+                BottomNavigationBarItem(
+                  icon: Obx(() => Icon(
+                        bottomNavController.currentIndex.value == 3
+                            ? Icons.pending
+                            : Icons.pending_outlined,
+                      )),
                   label: 'المزيد',
                 ),
               ],
@@ -158,7 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: true,
-
       title: Column(
         children: [
           Row(
@@ -188,19 +149,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      // actions: [
-      //   IconButton(
-      //     onPressed: () => Get.to(() => FavoritesScreen()),
-      //     icon: Icon(Icons.favorite_outline),
-      //   ),
-      //   IconButton(
-      //     onPressed: () => Get.to(() => FavoritesScreen()),
-      //     icon: Icon(Icons.forum_outlined),
-      //   ),
-      //   // to remove humburger menu icon
-      //   // SizedBox.shrink()
-      //   // horizontalSpace(10),
-      // ],
     );
   }
 }

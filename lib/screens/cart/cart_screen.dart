@@ -8,7 +8,6 @@ import 'package:miswag_clone/core/utils/themes/styles.dart';
 import 'package:miswag_clone/core/utils/widgets/app_text_button.dart';
 import 'package:miswag_clone/core/utils/widgets/on_empty_content.dart';
 import 'package:miswag_clone/screens/cart/widgets/cart_card.dart';
-import 'package:miswag_clone/screens/home/home_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});

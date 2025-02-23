@@ -17,6 +17,7 @@ import 'package:miswag_clone/core/utils/widgets/start_chatting.dart';
 import 'package:miswag_clone/core/utils/widgets/tiny_icon_button.dart';
 import 'package:miswag_clone/core/utils/widgets/warrentary_showcase.dart';
 import 'package:miswag_clone/screens/home/home_screen.dart';
+import 'package:miswag_clone/screens/items_screen/items_screen.dart';
 import 'package:miswag_clone/screens/items_screen/widgets/thumbnail_item_card.dart';
 
 class SingleItemScreen extends StatefulWidget {
@@ -226,52 +227,54 @@ class _SingleItemScreenState extends State<SingleItemScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Obx(() {
-          final existingItem = cartController.cartItems
-              .firstWhereOrNull((item) => item.product.id == widget.product.id);
-          return existingItem != null
-              ? Row(
-                  children: [
-                    Flexible(
-                      flex: 2,
-                      child: AppTextButton(
-                        isOutlinedBtn: true,
-                        backgroundColor: ColorsManager.secondary,
-                        buttonText: 'اشتري الآن',
-                        textStyle: TextStyle(
-                          color: ColorsManager.secondary,
-                          fontSize: 16,
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Obx(() {
+            final existingItem = cartController.cartItems.firstWhereOrNull(
+                (item) => item.product.id == widget.product.id);
+            return existingItem != null
+                ? Row(
+                    children: [
+                      Flexible(
+                        flex: 2,
+                        child: AppTextButton(
+                          isOutlinedBtn: true,
+                          backgroundColor: ColorsManager.secondary,
+                          buttonText: 'اشتري الآن',
+                          textStyle: TextStyle(
+                            color: ColorsManager.secondary,
+                            fontSize: 16,
+                          ),
+                          icon: Icon(
+                            Icons.shopping_cart_outlined,
+                            color: ColorsManager.secondary,
+                          ),
+                          isWithIcon: true,
+                          onPressed: () {
+                            Get.to(() => HomeScreen());
+                            bottomNavController.changeIndexWithArgs(2);
+                          },
                         ),
-                        icon: Icon(
-                          Icons.shopping_cart_outlined,
-                          color: ColorsManager.secondary,
-                        ),
-                        isWithIcon: true,
-                        onPressed: () {
-                          Get.to(() => HomeScreen());
-                          bottomNavController.changeIndexWithArgs(2);
-                        },
                       ),
+                      horizontalSpace(15),
+                      Flexible(child: quantityControls(existingItem)),
+                    ],
+                  )
+                : AppTextButton(
+                    buttonText: 'اضافة للسلة',
+                    backgroundColor: ColorsManager.secondary,
+                    icon: Icon(
+                      Icons.shopping_cart_outlined,
+                      color: ColorsManager.white,
                     ),
-                    horizontalSpace(15),
-                    Flexible(child: quantityControls(existingItem)),
-                  ],
-                )
-              : AppTextButton(
-                  buttonText: 'اضافة للسلة',
-                  backgroundColor: ColorsManager.secondary,
-                  icon: Icon(
-                    Icons.shopping_cart_outlined,
-                    color: ColorsManager.white,
-                  ),
-                  isWithIcon: true,
-                  onPressed: () {
-                    cartController.addToCart(widget.product, 1);
-                  },
-                );
-        }),
+                    isWithIcon: true,
+                    onPressed: () {
+                      cartController.addToCart(widget.product, 1);
+                    },
+                  );
+          }),
+        ),
       ),
     );
   }
@@ -290,7 +293,9 @@ class _SingleItemScreenState extends State<SingleItemScreen> {
               ),
               const Spacer(),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(() => ItemsScreen());
+                },
                 child: Text(
                   'مشاهدة المزيد',
                   style: TextStyles.font16GrayRegular.copyWith(

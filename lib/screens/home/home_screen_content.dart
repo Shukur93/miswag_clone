@@ -6,7 +6,6 @@ import 'package:miswag_clone/core/utils/helpers/spacing.dart';
 import 'package:miswag_clone/core/utils/themes/colors_manager.dart';
 import 'package:miswag_clone/core/utils/themes/styles.dart';
 import 'package:miswag_clone/core/utils/widgets/search_bar_engine.dart';
-import 'package:miswag_clone/core/utils/widgets/shimmer_placeholders.dart';
 import 'package:miswag_clone/screens/items_screen/items_screen.dart';
 import 'package:miswag_clone/screens/items_screen/widgets/thumbnail_item_card.dart';
 
@@ -30,9 +29,6 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    // print('===================== ');
-    // print('deviceId: $deviceId');
-    // print('===================== ');
     return RefreshIndicator(
       onRefresh: () async => (),
       color: ColorsManager.primary,
@@ -84,7 +80,9 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
               ),
               const Spacer(),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(() => const ItemsScreen());
+                },
                 child: Text(
                   'مشاهدة المزيد',
                   style: TextStyles.font16GrayRegular.copyWith(
@@ -225,7 +223,10 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
-      child: Image.asset(imageUrl),
+      child: InkWell(
+        onTap: () => Get.to(() => const ItemsScreen()),
+        child: Image.asset(imageUrl),
+      ),
       //  grid view
     );
   }
