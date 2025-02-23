@@ -9,7 +9,6 @@ A pixel-perfect clone with GetX state management, local data, and core e-commerc
 - **Favorites**: Save/remove favorite products with persistence
 - **Local Data**: Product catalog loaded from local files
 - **Animations**: Custom page transitions and UI interactions
-- **Multi-tab Layout**: Organized "More" screen with multiple sections
 
 ## Project Architecture
 
