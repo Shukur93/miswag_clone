@@ -47,6 +47,7 @@ class StartChatting extends StatelessWidget {
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: ColorsManager.gray,
+                    decoration: TextDecoration.none,
                   ),
                 ),
                 Text(
@@ -55,6 +56,7 @@ class StartChatting extends StatelessWidget {
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: ColorsManager.blackText,
+                    decoration: TextDecoration.none,
                   ),
                 ),
               ],

@@ -24,7 +24,7 @@ class TextStyles {
     height: 1,
   );
 
-   static TextStyle font25PrimaryTextBold = const TextStyle(
+  static TextStyle font25PrimaryTextBold = const TextStyle(
     fontSize: 25,
     fontWeight: FontWeightHelper.bold,
     color: ColorsManager.primaryText,
@@ -153,6 +153,7 @@ class TextStyles {
     fontSize: 14,
     fontWeight: FontWeightHelper.bold,
     color: ColorsManager.blackText,
+    decoration: TextDecoration.none,
   );
 
   static TextStyle font15BlackRegular = const TextStyle(
@@ -171,6 +172,7 @@ class TextStyles {
     fontSize: 16,
     fontWeight: FontWeightHelper.medium,
     color: ColorsManager.blackText,
+    decoration: TextDecoration.none,
   );
 
   static TextStyle font16BlackBold = const TextStyle(
