@@ -7,9 +7,8 @@ A pixel-perfect clone with GetX state management, local data, and core e-commerc
 - **GetX State Management**: Controllers for cart, favorites, and UI state
 - **Cart System**: Add/remove items, quantity control, total calculation
 - **Favorites**: Save/remove favorite products with persistence
-- **Local Data**: Product catalog loaded from local JSON files
+- **Local Data**: Product catalog loaded from local files
 - **Animations**: Custom page transitions and UI interactions
-- **Multi-tab Layout**: Organized "More" screen with multiple sections
 
 ## Project Architecture
 
