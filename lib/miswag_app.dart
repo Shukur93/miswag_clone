@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:miswag_clone/core/utils/themes/colors_manager.dart';
 import 'package:miswag_clone/screens/home/home_screen.dart';
@@ -13,8 +14,6 @@ class MiswagApp extends StatefulWidget {
 }
 
 class _MiswagAppState extends State<MiswagApp> {
-
-
   @override
   void initState() {
     super.initState();
@@ -25,14 +24,15 @@ class _MiswagAppState extends State<MiswagApp> {
     return GetMaterialApp(
       textDirection: TextDirection.rtl,
       home: const HomeScreen(),
-      builder: (context, child) {
-        // DevicePreview.appBuilder;
-        final mediaQueryData = MediaQuery.of(context);
-        return MediaQuery(
-          data: mediaQueryData.copyWith(textScaler: TextScaler.noScaling),
-          child: child!,
-        );
-      },
+      builder: EasyLoading.init(
+        builder: (context, child) {
+          final mediaQueryData = MediaQuery.of(context);
+          return MediaQuery(
+            data: mediaQueryData.copyWith(textScaler: TextScaler.noScaling),
+            child: child!,
+          );
+        },
+      ),
       theme: ThemeData(
         primaryColor: ColorsManager.primary,
         scaffoldBackgroundColor: Colors.white,
